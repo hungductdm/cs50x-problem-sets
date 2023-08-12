@@ -7,20 +7,19 @@
 /*
 Requirements
 
-Make program accept a single command line argument
-!! DONE + Check if there's no argument/ is space or blank
-!! DONE + Key is case-insensitive
-!! DONE + Print "Usage: ./substitution key" AND return 1 when there's input error
+Step 1: Make program accept a single command line argument
++ Check if there's no argument or argument is space(s) or blank
++ Key is case-insensitive.
++ Print "Usage: ./substitution key" AND return 1 when there's input error
 
-Ask user for plaintext
+Step 2: Ask user for plaintext
 
-Output ciphertext based on key
+Step 3: Output ciphertext based on key
 + Each character of plaintext is replaced by corresponding character in key
 + Output reserves character case
 + Output ignores non alphabetical characters
 + Print new line at the end of ciphertext
 + Return 0 in main if program runs successfully
-
 */
 
 bool key_check(string s);
@@ -31,12 +30,14 @@ char substitute(char c, string key);
 
 int main(int argc, string argv[])
 {
+    // Check if there's only one command line argument.
     if (argc != 2)
     {
         printf("Usage: ./substitution key\n");
         return 1;
     }
 
+    // Run custom function to check if user entered the correct "key"
     else if (key_check(argv[1]) == 1)
     {
         return 1;
@@ -113,12 +114,20 @@ bool string_isalpha(string s)
 
 
 // Function to look for repeated characters in key
+/* METHOD
+- Convert individual characters of key into decimal format (ASCII table) and store them into a new array: dec_array[] 
+- Compare each element of dec_array against an ordinary alphabet also in decimal: upper_alpha[]
+    + If there's a match, store the number of times that character is repeated into a new array named count[].
+    + If count[] contains any element other than 1, there's a repeated character OR a character in the alphabet is missing.
+    + If all 26 elements of count[] array is 1, the key is entered correctly. Key in this case contains all 26 unique characters of the alphabet.
+*/
 bool repeated_char(string s)
 
 {
     int output;
 
-    // Create an array for 26 alphabet characters in uppercase
+    // Create a reference array for 26 alphabet characters in uppercase
+    // This array contains the 26 ordinary alphabet characters in decimal type (refer to ASCII table)
     int upper_alpha[26];
     int y = 65;
     for (int x = 0; x < 26; x++)
@@ -127,7 +136,7 @@ bool repeated_char(string s)
         y++;
     }
 
-    // Convert key to uppercase
+    // Convert all characters in key to uppercase
     for (int i = 0; i < 26; i++)
     {
         s[i] = toupper(s[i]);
@@ -136,7 +145,7 @@ bool repeated_char(string s)
     int count[26];
     int dec_array[26];
 
-    // Convert key to ascii array
+    // Convert all characters in key to decimal type (refer to ASCII table), then assign to dec_array array
     for (int i = 0; i < 26; i++)
     {
         int decimal_val = s[i];
@@ -165,7 +174,7 @@ bool repeated_char(string s)
     }
 
 
-    // Check count array to see if there's a repeated character, the return output
+    // Check count array to see if there's a repeated or missing character, the return output
     for (int i = 0; i < 26; i++)
     {
         if (count[i] != 1)
